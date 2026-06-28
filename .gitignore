@@ -1,8 +1,7 @@
 # Ignore large zip files
 *.zip
 
-# Ignore dataset directories and results
+# Ignore dataset directories
 hpatches-dataset/
 hpatches-release/
 hpatches-sequences-release/
-hpatches_results/
