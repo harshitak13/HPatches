@@ -90,6 +90,67 @@ pip install opencv-contrib-python numpy matplotlib tqdm
 pip install torch torchvision
 ```
 
+### Dataset Download & Directory Structure
+
+The HPatches datasets are too large to be stored on GitHub (totaling ~10 GB uncompressed). To run the evaluation pipeline on the real datasets, you must download and extract them locally.
+
+#### Local Folder Structure
+For the evaluation script to automatically locate the dataset, structure your project workspace like this after downloading and extracting:
+
+```text
+HPatches/
+├── .gitignore
+├── README.md
+├── hpatches_descriptor_eval.py
+├── hpatches_results/                 # (Generated results and charts)
+│   └── ...
+├── hpatches-sequences-release/       # (For Full-Image Sequences - Mode A)
+│   ├── i_ajuntament/
+│   │   ├── 1.ppm
+│   │   ├── 2.ppm
+│   │   └── H_1_2
+│   ├── v_abs/
+│   └── ...
+└── hpatches-release/                 # (For Pre-extracted Patches - Mode B)
+    ├── i_ajuntament/
+    │   ├── ref.png
+    │   ├── e1.png
+    │   └── ...
+    ├── v_abs/
+    └── ...
+```
+
+#### Download Commands
+
+Run the following commands in your terminal (Linux/macOS/Git Bash) from the project root directory:
+
+##### 1. Full-Image Sequences (Mode A — for Image Matching/MMA)
+```bash
+# Download the archive (~1.2 GB compressed)
+curl -O http://icvl.ee.ic.ac.uk/vbalnt/hpatches/hpatches-sequences-release.tar.gz
+
+# Extract the archive
+tar -xzf hpatches-sequences-release.tar.gz
+
+# Remove the downloaded archive to save space
+rm hpatches-sequences-release.tar.gz
+```
+
+##### 2. Pre-extracted Patches (Mode B — for Patch Verification & Retrieval)
+```bash
+# Download the archive (~4.2 GB compressed)
+curl -O http://icvl.ee.ic.ac.uk/vbalnt/hpatches/hpatches-release.tar.gz
+
+# Extract the archive
+tar -xzf hpatches-release.tar.gz
+
+# Remove the downloaded archive to save space
+rm hpatches-release.tar.gz
+```
+
+> [!NOTE]
+> **Windows Users:** You can use `curl.exe -O <URL>` and extract the archives using a tool like 7-Zip, or execute the commands inside **Git Bash**.
+
 ---
 
 ## Usage Guide
