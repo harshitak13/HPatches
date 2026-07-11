@@ -1,4 +1,5 @@
 from pathlib import Path
+import tempfile
 
 import torch
 
@@ -10,7 +11,7 @@ from ripe.models.upsampler.hypercolumn_features import HyperColumnFeatures
 def vgg_hyper(model_path: Path = None, desc_shares=None):
     if model_path is None:
         # check if the weights file exists in the current directory
-        model_path = Path("/tmp/ripe_weights.pth")
+        model_path = Path(tempfile.gettempdir()) / "ripe_weights.pth"
     
         if model_path.exists():
             print(f"Using existing weights from {model_path}")
@@ -18,7 +19,7 @@ def vgg_hyper(model_path: Path = None, desc_shares=None):
             print("Weights file not found. Downloading ...")
             torch.hub.download_url_to_file(
                 "https://cvg.hhi.fraunhofer.de/RIPE/ripe_weights.pth",
-                "/tmp/ripe_weights.pth",
+                str(model_path),
             )
     else:
         if not model_path.exists():

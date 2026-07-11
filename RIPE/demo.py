@@ -1,3 +1,5 @@
+import sys
+from pathlib import Path
 import cv2
 import kornia.feature as KF
 import kornia.geometry as KG
@@ -6,19 +8,33 @@ import numpy as np
 import torch
 from torchvision.io import decode_image
 
+# Ensure the RIPE directory is in python module search path
+sys.path.append(str(Path(__file__).parent))
+
 from ripe import vgg_hyper
 from ripe.utils.utils import cv2_matches_from_kornia, resize_image, to_cv_kpts
 
 dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-from pathlib import Path
-weights = Path("ripe/weights/ripe_weights.pth")
+weights = Path(__file__).parent / "ripe/weights/ripe_weights.pth"
 
 model = vgg_hyper(weights).to(dev)
 model.eval()
 
-img1 = cv2.imread(r"C:\Users\SSD\Downloads\hpatches\data\i_castle\1.ppm")
-img2 = cv2.imread(r"C:\Users\SSD\Downloads\hpatches\data\i_castle\2.ppm")
+# Try relative workspace path first, fallback to original absolute path
+img1_path = Path(__file__).parent / "../data/i_castle/1.ppm"
+if not img1_path.exists():
+    img1_path = Path(r"C:\Users\SSD\OneDrive\Desktop\HPatches\hpatches\data\i_castle\1.ppm")
+
+img2_path = Path(__file__).parent / "../data/i_castle/2.ppm"
+if not img2_path.exists():
+    img2_path = Path(r"C:\Users\SSD\OneDrive\Desktop\HPatches\hpatches\data\i_castle\2.ppm")
+
+img1 = cv2.imread(str(img1_path))
+img2 = cv2.imread(str(img2_path))
+
+if img1 is None or img2 is None:
+    raise FileNotFoundError(f"Could not load images. Check paths:\n- {img1_path}\n- {img2_path}")
 
 img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
 img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
